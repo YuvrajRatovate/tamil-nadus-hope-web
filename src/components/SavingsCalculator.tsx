@@ -98,7 +98,7 @@ const SavingsCalculator = () => {
     if (moneySaved < 5000) {
       financialEquivalent = `A month's groceries for a family`;
     } else if (moneySaved < 50000) {
-      financialEquivalent = 'A child's school fees for a year';
+      financialEquivalent = "A child's school fees for a year";
     } else if (moneySaved < 150000) {
       financialEquivalent = 'A basic motorcycle or major home renovation';
     } else {
