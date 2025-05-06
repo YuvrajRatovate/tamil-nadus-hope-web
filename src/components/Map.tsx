@@ -1,8 +1,23 @@
 
-import React, { useState, useEffect, useRef } from 'react';
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
+import React from 'react';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
 import { Card } from './ui/card';
+import L from 'leaflet';
+
+// Fix for the marker icon issue in Leaflet
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+
+let DefaultIcon = L.icon({
+  iconUrl: icon,
+  shadowUrl: iconShadow,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+});
+
+L.Marker.prototype.options.icon = DefaultIcon;
 
 // Chennai coordinates
 const OFFICE_LOCATION = {
@@ -20,115 +35,39 @@ const REGIONAL_OFFICES = [
 
 interface MapProps {
   height?: string;
-  mapboxToken?: string;
 }
 
-const Map = ({ height = '500px', mapboxToken }: MapProps) => {
-  const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<mapboxgl.Map | null>(null);
-  const [token, setToken] = useState<string | undefined>(mapboxToken);
-  const [showTokenInput, setShowTokenInput] = useState(!mapboxToken);
-
-  useEffect(() => {
-    if (!token || !mapContainer.current) return;
-    
-    // Initialize map
-    mapboxgl.accessToken = token;
-    
-    try {
-      map.current = new mapboxgl.Map({
-        container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/streets-v11',
-        center: [OFFICE_LOCATION.lng, OFFICE_LOCATION.lat],
-        zoom: OFFICE_LOCATION.zoom
-      });
-      
-      // Add navigation controls
-      map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
-      
-      // Add markers for all offices
-      REGIONAL_OFFICES.forEach(office => {
-        // Create a marker element
-        const markerElement = document.createElement('div');
-        markerElement.className = 'custom-marker';
-        markerElement.style.width = '24px';
-        markerElement.style.height = '24px';
-        markerElement.style.backgroundImage = 'url(https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png)';
-        markerElement.style.backgroundSize = 'cover';
-        
-        // Create a popup
-        const popup = new mapboxgl.Popup({ offset: 25 })
-          .setHTML(`
-            <strong>${office.name}</strong>
-            <p>${office.address}</p>
-          `);
-        
-        // Add marker to map
-        new mapboxgl.Marker(markerElement)
-          .setLngLat([office.lng, office.lat])
-          .setPopup(popup)
-          .addTo(map.current);
-      });
-      
-      // Clean up on unmount
-      return () => {
-        if (map.current) {
-          map.current.remove();
-        }
-      };
-    } catch (error) {
-      console.error("Error initializing map:", error);
-    }
-  }, [token]);
-  
-  const handleTokenSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const newToken = formData.get('mapboxToken') as string;
-    if (newToken) {
-      setToken(newToken);
-      setShowTokenInput(false);
-      localStorage.setItem('mapboxToken', newToken);
-    }
-  };
-  
-  // Try to load token from localStorage on component mount
-  useEffect(() => {
-    if (!token) {
-      const savedToken = localStorage.getItem('mapboxToken');
-      if (savedToken) {
-        setToken(savedToken);
-        setShowTokenInput(false);
-      }
-    }
-  }, [token]);
-
+const Map = ({ height = '500px' }: MapProps) => {
   return (
     <div className="w-full" style={{ height }}>
-      {showTokenInput ? (
-        <Card className="p-6">
-          <h3 className="font-bold text-lg mb-4">Enter Mapbox Token</h3>
-          <p className="mb-4">
-            To display the interactive map, please enter your Mapbox public token.
-            You can get a free token by signing up at <a href="https://mapbox.com" target="_blank" rel="noreferrer" className="text-primary underline">mapbox.com</a>
-          </p>
-          <form onSubmit={handleTokenSubmit} className="space-y-4">
-            <div>
-              <input 
-                type="text" 
-                name="mapboxToken" 
-                placeholder="Enter your Mapbox public token" 
-                className="w-full p-2 border border-gray-300 rounded"
-              />
-            </div>
-            <button type="submit" className="bg-primary text-white px-4 py-2 rounded">
-              Show Map
-            </button>
-          </form>
-        </Card>
-      ) : (
-        <div ref={mapContainer} className="w-full h-full rounded-lg overflow-hidden" />
-      )}
+      <Card className="w-full h-full overflow-hidden">
+        <MapContainer 
+          center={[OFFICE_LOCATION.lat, OFFICE_LOCATION.lng]} 
+          zoom={OFFICE_LOCATION.zoom} 
+          scrollWheelZoom={false} 
+          style={{ height: '100%', width: '100%' }}
+          className="z-0"
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          
+          {REGIONAL_OFFICES.map((office, index) => (
+            <Marker 
+              key={index} 
+              position={[office.lat, office.lng]}
+            >
+              <Popup>
+                <div>
+                  <strong>{office.name}</strong>
+                  <p>{office.address}</p>
+                </div>
+              </Popup>
+            </Marker>
+          ))}
+        </MapContainer>
+      </Card>
     </div>
   );
 };
