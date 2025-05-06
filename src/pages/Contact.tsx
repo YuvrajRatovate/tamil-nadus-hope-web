@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Hero from '@/components/Hero';
 import { Button } from "@/components/ui/button";
@@ -9,6 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Mail, Phone, MapPin, Clock } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from "@/integrations/supabase/client";
+import Map from '@/components/Map';
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -232,11 +232,8 @@ const ContactPage = () => {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold mb-8 text-center">Find Us</h2>
           
-          <div className="bg-gray-300 h-96 rounded-lg overflow-hidden mx-auto max-w-4xl">
-            {/* Placeholder for map */}
-            <div className="w-full h-full flex items-center justify-center">
-              <p className="text-gray-600">Interactive map would be displayed here</p>
-            </div>
+          <div className="mx-auto max-w-4xl">
+            <Map height="500px" />
           </div>
         </div>
       </section>
