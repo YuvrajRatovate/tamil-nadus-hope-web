@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mail, Phone, MapPin, Clock } from 'lucide-react';
 import { toast } from 'sonner';
+import { supabase } from "@/integrations/supabase/client";
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -24,15 +25,26 @@ const ContactPage = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
   
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate form submission
-    setTimeout(() => {
-      console.log('Form submitted:', formData);
+    try {
+      // Insert the contact form data into Supabase
+      const { error } = await supabase
+        .from('contacts')
+        .insert([formData]);
+        
+      if (error) {
+        console.error("Error submitting contact form:", error);
+        toast.error("There was a problem submitting your message. Please try again.");
+        setIsSubmitting(false);
+        return;
+      }
+      
+      console.log("Contact form submitted successfully");
       setIsSubmitting(false);
-      toast.success('Thank you! Your message has been sent.');
+      toast.success("Thank you! Your message has been sent.");
       setFormData({
         name: '',
         email: '',
@@ -40,7 +52,11 @@ const ContactPage = () => {
         subject: '',
         message: ''
       });
-    }, 1500);
+    } catch (error) {
+      console.error("Exception submitting contact form:", error);
+      toast.error("An unexpected error occurred. Please try again.");
+      setIsSubmitting(false);
+    }
   };
 
   return (

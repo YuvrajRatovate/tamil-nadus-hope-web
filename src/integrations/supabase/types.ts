@@ -39,6 +39,48 @@ export type Database = {
         }
         Relationships: []
       }
+      pledges: {
+        Row: {
+          address: string | null
+          amount: number
+          city: string | null
+          created_at: string
+          email: string
+          frequency: string
+          full_name: string
+          id: number
+          message: string | null
+          phone: string | null
+          state: string | null
+        }
+        Insert: {
+          address?: string | null
+          amount: number
+          city?: string | null
+          created_at?: string
+          email: string
+          frequency: string
+          full_name: string
+          id?: number
+          message?: string | null
+          phone?: string | null
+          state?: string | null
+        }
+        Update: {
+          address?: string | null
+          amount?: number
+          city?: string | null
+          created_at?: string
+          email?: string
+          frequency?: string
+          full_name?: string
+          id?: number
+          message?: string | null
+          phone?: string | null
+          state?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

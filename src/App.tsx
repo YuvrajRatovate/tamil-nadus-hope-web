@@ -16,6 +16,12 @@ import Donate from "./pages/Donate";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 
+// Program Detail Pages
+import RehabilitationProgram from "./pages/programs/Rehabilitation";
+import FamilySupportProgram from "./pages/programs/FamilySupport";
+import PreventionEducationProgram from "./pages/programs/PreventionEducation";
+import VocationalTrainingProgram from "./pages/programs/VocationalTraining";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -34,6 +40,13 @@ const App = () => (
                 <Route path="/about" element={<About />} />
                 <Route path="/donate" element={<Donate />} />
                 <Route path="/contact" element={<Contact />} />
+                
+                {/* Program Detail Pages */}
+                <Route path="/programs/rehabilitation" element={<RehabilitationProgram />} />
+                <Route path="/programs/family-support" element={<FamilySupportProgram />} />
+                <Route path="/programs/prevention-education" element={<PreventionEducationProgram />} />
+                <Route path="/programs/vocational-training" element={<VocationalTrainingProgram />} />
+                
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>

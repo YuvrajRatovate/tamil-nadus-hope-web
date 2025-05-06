@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 interface FormData {
   fullName: string;
@@ -31,7 +32,7 @@ const PledgeForm = () => {
     handleSubmit,
     formState: { errors },
     setValue,
-    watch,
+    reset
   } = useForm<FormData>({
     defaultValues: {
       fullName: '',
@@ -46,16 +47,44 @@ const PledgeForm = () => {
     }
   });
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     
-    // Simulate form submission
-    setTimeout(() => {
-      console.log("Form submitted:", data);
+    try {
+      // Insert the pledge into Supabase
+      const { error } = await supabase
+        .from('pledges')
+        .insert([
+          {
+            full_name: data.fullName,
+            email: data.email,
+            phone: data.phone,
+            address: data.address,
+            city: data.city,
+            state: data.state,
+            amount: data.amount,
+            frequency: data.frequency,
+            message: data.message
+          }
+        ]);
+        
+      if (error) {
+        console.error("Error submitting pledge:", error);
+        toast.error("There was a problem submitting your pledge. Please try again.");
+        setIsSubmitting(false);
+        return;
+      }
+      
+      console.log("Pledge submitted successfully");
       setIsSubmitting(false);
       setPledgeComplete(true);
       toast.success("Thank you for your pledge! We'll contact you shortly.");
-    }, 1500);
+      reset();
+    } catch (error) {
+      console.error("Exception submitting pledge:", error);
+      toast.error("An unexpected error occurred. Please try again.");
+      setIsSubmitting(false);
+    }
   };
 
   if (pledgeComplete) {
