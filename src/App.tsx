@@ -1,4 +1,5 @@
 
+import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -25,38 +26,40 @@ import VocationalTrainingProgram from "./pages/programs/VocationalTraining";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <FontSizeProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <div className="flex flex-col min-h-screen">
-            <Navbar />
-            <main className="flex-grow">
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/programs" element={<Programs />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/donate" element={<Donate />} />
-                <Route path="/contact" element={<Contact />} />
-                
-                {/* Program Detail Pages */}
-                <Route path="/programs/rehabilitation" element={<RehabilitationProgram />} />
-                <Route path="/programs/family-support" element={<FamilySupportProgram />} />
-                <Route path="/programs/prevention-education" element={<PreventionEducationProgram />} />
-                <Route path="/programs/vocational-training" element={<VocationalTrainingProgram />} />
-                
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </main>
-            <Footer />
-          </div>
-        </BrowserRouter>
-      </FontSizeProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <FontSizeProvider>
+          <BrowserRouter>
+            <Toaster />
+            <Sonner />
+            <div className="flex flex-col min-h-screen">
+              <Navbar />
+              <main className="flex-grow">
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/programs" element={<Programs />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/donate" element={<Donate />} />
+                  <Route path="/contact" element={<Contact />} />
+                  
+                  {/* Program Detail Pages */}
+                  <Route path="/programs/rehabilitation" element={<RehabilitationProgram />} />
+                  <Route path="/programs/family-support" element={<FamilySupportProgram />} />
+                  <Route path="/programs/prevention-education" element={<PreventionEducationProgram />} />
+                  <Route path="/programs/vocational-training" element={<VocationalTrainingProgram />} />
+                  
+                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </main>
+              <Footer />
+            </div>
+          </BrowserRouter>
+        </FontSizeProvider>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </React.StrictMode>
 );
 
 export default App;
