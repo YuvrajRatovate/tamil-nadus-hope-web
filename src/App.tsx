@@ -23,6 +23,18 @@ import FamilySupportProgram from "./pages/programs/FamilySupport";
 import PreventionEducationProgram from "./pages/programs/PreventionEducation";
 import VocationalTrainingProgram from "./pages/programs/VocationalTraining";
 
+// Additional Program Pages
+import AlcoholCessationProgram from "./pages/programs/AlcoholCessation";
+import TobaccoCessationProgram from "./pages/programs/TobaccoCessation";
+import DrugRehabilitationProgram from "./pages/programs/DrugRehabilitation";
+import SavingsCalculatorPage from "./pages/programs/SavingsCalculator";
+import CounselingProgram from "./pages/programs/Counseling";
+import EmploymentSupportProgram from "./pages/programs/EmploymentSupport";
+import EducationPrograms from "./pages/programs/EducationPrograms";
+import AwarenessCampaigns from "./pages/programs/AwarenessCampaigns";
+import VillageOutreach from "./pages/programs/VillageOutreach";
+import SkillsWorkshops from "./pages/programs/SkillsWorkshops";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -43,11 +55,27 @@ const App = () => (
                   <Route path="/donate" element={<Donate />} />
                   <Route path="/contact" element={<Contact />} />
                   
-                  {/* Program Detail Pages */}
+                  {/* Original Program Detail Pages */}
                   <Route path="/programs/rehabilitation" element={<RehabilitationProgram />} />
                   <Route path="/programs/family-support" element={<FamilySupportProgram />} />
                   <Route path="/programs/prevention-education" element={<PreventionEducationProgram />} />
                   <Route path="/programs/vocational-training" element={<VocationalTrainingProgram />} />
+                  
+                  {/* Quit Programs */}
+                  <Route path="/programs/alcohol" element={<AlcoholCessationProgram />} />
+                  <Route path="/programs/tobacco" element={<TobaccoCessationProgram />} />
+                  <Route path="/programs/drugs" element={<DrugRehabilitationProgram />} />
+                  <Route path="/programs/calculator" element={<SavingsCalculatorPage />} />
+                  
+                  {/* Support Services */}
+                  <Route path="/programs/counseling" element={<CounselingProgram />} />
+                  <Route path="/programs/employment" element={<EmploymentSupportProgram />} />
+                  <Route path="/programs/education" element={<EducationPrograms />} />
+                  
+                  {/* Community Initiatives */}
+                  <Route path="/programs/awareness" element={<AwarenessCampaigns />} />
+                  <Route path="/programs/village" element={<VillageOutreach />} />
+                  <Route path="/programs/workshops" element={<SkillsWorkshops />} />
                   
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
