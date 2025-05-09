@@ -42,14 +42,15 @@ const Map = ({ height = '500px' }: MapProps) => {
     <div className="w-full" style={{ height }}>
       <Card className="w-full h-full overflow-hidden">
         <MapContainer 
+          center={[OFFICE_LOCATION.lat, OFFICE_LOCATION.lng]} 
+          zoom={OFFICE_LOCATION.zoom} 
+          scrollWheelZoom={false} 
           style={{ height: '100%', width: '100%' }}
           className="z-0"
-          zoom={OFFICE_LOCATION.zoom}
-          scrollWheelZoom={false}
         >
           <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           
           {REGIONAL_OFFICES.map((office, index) => (
